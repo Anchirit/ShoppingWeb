@@ -1,0 +1,330 @@
+﻿<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>丘先生的杂货铺 | 前台与销售中台</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Fraunces:wght@400;600&family=Noto+Sans+SC:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="backdrop" aria-hidden="true">
+      <span class="orb orb--one"></span>
+      <span class="orb orb--two"></span>
+      <span class="orb orb--three"></span>
+    </div>
+
+    <div class="app">
+      <aside class="nav-panel">
+        <div class="brand">
+          <div class="brand-mark">丘</div>
+          <div>
+            <div class="brand-title">丘先生的杂货铺</div>
+            <div class="brand-sub">前台与销售中台</div>
+          </div>
+        </div>
+        <nav class="nav-links">
+          <button class="nav-btn active" data-nav="shop">商品橱窗</button>
+          <button class="nav-btn" data-nav="cart">购物车与结算</button>
+          <button class="nav-btn" data-nav="orders">订单中心</button>
+          <button class="nav-btn" data-nav="admin" data-requires="sales">销售后台</button>
+        </nav>
+        <div class="nav-footer">
+          <div class="pill">实时同步</div>
+          <div class="pill">安全结算</div>
+        </div>
+      </aside>
+
+      <section class="main-panel">
+        <header class="topbar">
+          <div>
+            <div class="eyebrow">零售运营中台</div>
+            <h1>丘先生的杂货铺：严谨流程与美学体验并行</h1>
+            <p class="subhead">
+              浏览、加购、支付、邮件确认、订单追踪与销售端运营一体化。
+            </p>
+          </div>
+          <div class="auth-actions">
+            <div id="auth-status" class="status-pill">游客模式</div>
+            <button class="btn ghost" id="open-auth">登录 / 注册</button>
+            <button class="btn ghost hidden" id="logout">退出登录</button>
+          </div>
+        </header>
+
+        <section class="hero">
+          <div class="hero-card">
+            <h2>完整购物闭环</h2>
+            <p>
+              从发现到收货确认，全流程可视，沉淀客户历史与操作日志。
+            </p>
+            <div class="hero-tags">
+              <span>浏览</span>
+              <span>加购</span>
+              <span>支付</span>
+              <span>邮件</span>
+              <span>追踪</span>
+            </div>
+          </div>
+          <div class="hero-card">
+            <h2 id="metrics-title">销售可视化</h2>
+            <p id="metrics-subtitle">
+              商品、订单、统计、客户行为统一管理，实时掌握经营状态。
+            </p>
+            <div class="hero-metrics">
+              <div>
+                <div class="metric-label" id="metric-orders-label">累计订单</div>
+                <div class="metric-value" id="metric-orders">0</div>
+              </div>
+              <div>
+                <div class="metric-label" id="metric-revenue-label">累计收入</div>
+                <div class="metric-value" id="metric-revenue">￥0</div>
+              </div>
+            </div>
+            <button class="btn ghost small hidden" id="open-buyer-summary" type="button">
+              查看近30天明细
+            </button>
+          </div>
+        </section>
+
+        <section class="panel" data-view="shop">
+          <div class="panel-head">
+            <div>
+              <h2>商品橱窗</h2>
+              <p class="muted">搜索、筛选、查看详情并加入购物车。</p>
+            </div>
+            <div class="filters">
+              <input id="search-input" type="search" placeholder="搜索商品" />
+              <select id="category-filter">
+                <option value="all">全部分类</option>
+              </select>
+            </div>
+          </div>
+          <div id="product-grid" class="grid"></div>
+          <div class="pagination">
+            <button class="btn ghost" id="page-prev">上一页</button>
+            <div id="page-info" class="muted small">第 1 / 1 页</div>
+            <button class="btn ghost" id="page-next">下一页</button>
+          </div>
+
+          <div id="product-detail" class="detail hidden">
+            <div class="detail-card">
+              <button class="icon-btn" id="close-detail" aria-label="关闭">
+                X
+              </button>
+              <div class="detail-media" id="detail-media"></div>
+              <div class="detail-info">
+                <div class="detail-tag" id="detail-category"></div>
+                <h3 id="detail-title"></h3>
+                <p id="detail-summary" class="muted"></p>
+                <div class="detail-meta">
+                  <div>
+                    <div class="metric-label">价格</div>
+                    <div class="metric-value" id="detail-price"></div>
+                  </div>
+                  <div>
+                    <div class="metric-label">库存</div>
+                    <div class="metric-value" id="detail-stock"></div>
+                  </div>
+                </div>
+                <button class="btn primary" id="detail-add">加入购物车</button>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <section class="panel hidden" data-view="cart">
+          <div class="panel-head">
+            <div>
+              <h2>购物车与结算</h2>
+              <p class="muted">核对商品、填写地址并完成支付。</p>
+            </div>
+          </div>
+          <div class="cart-layout">
+            <div>
+              <div id="cart-items" class="stack"></div>
+              <div class="cart-summary" id="cart-summary"></div>
+            </div>
+            <form id="checkout-form" class="checkout">
+              <h3>结算步骤</h3>
+              <div class="step">
+                <div class="step-title">收货信息</div>
+                <input name="fullName" type="text" placeholder="姓名" required />
+                <input name="email" type="email" placeholder="邮箱" required />
+                <input name="address" type="text" placeholder="详细地址" required />
+                <div class="split">
+                  <input name="city" type="text" placeholder="城市" required />
+                  <input name="postal" type="text" placeholder="邮编" required />
+                </div>
+                <input name="country" type="text" placeholder="国家/地区" required />
+              </div>
+              <div class="step">
+                <div class="step-title">支付方式</div>
+                <select name="paymentMethod" required>
+                  <option value="银行卡">银行卡</option>
+                  <option value="电子钱包">电子钱包</option>
+                  <option value="Stripe 沙箱">Stripe 沙箱</option>
+                  <option value="支付宝沙箱">支付宝沙箱</option>
+                  <option value="银行转账">银行转账</option>
+                </select>
+                <button class="btn primary" type="submit">确认支付并发送邮件</button>
+                <div id="checkout-note" class="muted small"></div>
+              </div>
+            </form>
+          </div>
+        </section>
+
+        <section class="panel hidden" data-view="orders">
+          <div class="panel-head">
+            <div>
+              <h2>订单状态与历史</h2>
+              <p class="muted">查看订单进度、支付状态与确认记录。</p>
+            </div>
+          </div>
+          <div id="orders-list" class="stack"></div>
+        </section>
+
+        <section class="panel hidden" data-view="admin">
+          <div class="panel-head">
+            <div>
+              <h2>销售后台</h2>
+              <p class="muted">商品管理、订单管理、数据看板与客户日志。</p>
+            </div>
+          </div>
+
+          <div id="admin-locked" class="callout hidden">
+            销售后台已锁定，请使用销售账号登录。
+          </div>
+
+          <div id="admin-panels" class="admin-grid">
+            <div class="card">
+              <h3>商品管理</h3>
+              <form id="product-form" class="stack">
+                <input name="name" type="text" placeholder="商品名称" required />
+                <input name="category" type="text" placeholder="分类" required />
+                <input name="price" type="number" min="0" step="0.01" placeholder="价格" required />
+                <input name="stock" type="number" min="0" step="1" placeholder="库存" required />
+                <textarea name="summary" rows="3" placeholder="商品简介"></textarea>
+                <div class="upload-row">
+                  <label class="muted small" for="product-image">商品主图</label>
+                  <input id="product-image" name="image" type="file" accept="image/*" />
+                </div>
+                <div class="split">
+                  <input name="colorA" type="text" placeholder="主题色 A (#hex)" />
+                  <input name="colorB" type="text" placeholder="主题色 B (#hex)" />
+                </div>
+                <button class="btn primary" type="submit" id="product-submit">
+                  新增商品
+                </button>
+                <button class="btn ghost" type="button" id="product-cancel">
+                  取消编辑
+                </button>
+              </form>
+              <div id="product-list" class="stack"></div>
+            </div>
+
+            <div class="card">
+              <h3>订单管理</h3>
+              <div id="admin-orders" class="stack"></div>
+            </div>
+
+            <div class="card">
+              <h3>销售统计</h3>
+              <div class="stats-row">
+                <div>
+                  <div class="metric-label">已支付订单</div>
+                  <div class="metric-value" id="stats-orders">0</div>
+                </div>
+                <div>
+                  <div class="metric-label">销售额</div>
+                  <div class="metric-value" id="stats-revenue">￥0</div>
+                </div>
+              </div>
+              <div id="sales-chart" class="chart"></div>
+            </div>
+
+            <div class="card">
+              <h3>客户管理</h3>
+              <div id="customer-list" class="stack"></div>
+            </div>
+          </div>
+        </section>
+      </section>
+
+      <aside class="side-panel">
+        <div class="panel-card">
+          <h3>当前会话</h3>
+          <div id="session-summary" class="stack"></div>
+        </div>
+        <div class="panel-card">
+          <h3>通知中心</h3>
+          <ul id="notifications" class="notifications"></ul>
+        </div>
+        <div class="panel-card">
+          <h3>迷你购物车</h3>
+          <div id="mini-cart" class="stack"></div>
+        </div>
+      </aside>
+    </div>
+
+    <dialog id="auth-modal">
+      <div class="auth-card">
+        <div class="auth-tabs">
+          <button class="tab active" data-auth-tab="login">登录</button>
+          <button class="tab" data-auth-tab="register">注册</button>
+        </div>
+        <div class="tab-panel active" data-auth-panel="login">
+          <form id="login-form" class="stack">
+            <input name="email" type="email" placeholder="邮箱" required />
+            <input name="password" type="password" placeholder="密码" required />
+            <button class="btn primary" type="submit">登录</button>
+          </form>
+        </div>
+        <div class="tab-panel" data-auth-panel="register">
+          <form id="register-form" class="stack">
+            <input name="name" type="text" placeholder="姓名" required />
+            <input name="email" type="email" placeholder="邮箱" required />
+            <input name="password" type="password" placeholder="密码" required />
+            <input name="salesCode" type="text" placeholder="销售注册码（仅销售人员）" />
+            <button class="btn primary" type="submit">创建账号</button>
+          </form>
+        </div>
+        <button class="btn ghost close-dialog" type="button">关闭</button>
+      </div>
+    </dialog>
+
+    <dialog id="buyer-summary-dialog">
+      <div class="summary-card">
+        <div class="summary-head">
+          <div>
+            <div class="metric-label">近30天消费概览</div>
+            <div class="metric-value" id="buyer-summary-total">￥0</div>
+            <div class="muted small" id="buyer-summary-sub">共 0 件商品 · 0 笔订单</div>
+          </div>
+          <button class="icon-btn" id="close-buyer-summary" aria-label="关闭">
+            X
+          </button>
+        </div>
+        <div class="summary-table">
+          <div class="summary-row summary-header">
+            <span>购买时间</span>
+            <span>商品</span>
+            <span>介绍</span>
+            <span>数量</span>
+            <span>发货</span>
+            <span>签收</span>
+          </div>
+          <div id="buyer-summary-list" class="summary-body"></div>
+        </div>
+      </div>
+    </dialog>
+
+    <div id="toast" class="toast" role="status" aria-live="polite"></div>
+
+    <script src="app.js?v=20251231"></script>
+  </body>
+</html>
