@@ -50,8 +50,7 @@ docker compose up
 │   ├── index.html           # 页面结构
 │   └── styles.css           # 样式、动画与响应式布局
 ├── docker-compose.yml       # 容器编排
-├── README.md                # 使用说明
-└── 项目介绍.md              # 设计/功能完整介绍
+└── README.md                # 使用说明
 ```
 
 ## 代码说明
